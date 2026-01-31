@@ -1,233 +1,150 @@
+// ------------------------------
+// QUESTIONS
+// ------------------------------
+
 let quizData = [
   {
-    question: "What is the capital of Japan?",
-    options: ["Tokyo", "Beijing", "Seoul", "Bangkok"],
-    correct: "Tokyo",
+    question: "What is the worst error detection method?",
+    options: ["Echo check", "Parity Bit", "Checksum", "ARQ"],
+    correct: "Echo check",
   },
   {
-    question: "Which planet is known as the 'Red Planet'?",
-    options: ["Mars", "Venus", "Jupiter", "Mercury"],
-    correct: "Mars",
+    question: "Example question 2?",
+    options: ["A", "B", "C", "D"],
+    correct: "C",
   },
-  {
-    question:
-      "Which famous scientist developed the theory of general relativity?",
-    options: [
-      "Isaac Newton",
-      "Albert Einstein",
-      "Stephen Hawking",
-      "Galileo Galilei",
-    ],
-    correct: "Albert Einstein",
-  },
-  {
-    question: "What is the largest mammal on Earth?",
-    options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
-    correct: "Blue Whale",
-  },
-  {
-    question: "Which famous artist painted the Mona Lisa?",
-    options: [
-      "Vincent van Gogh",
-      "Pablo Picasso",
-      "Leonardo da Vinci",
-      "Michelangelo",
-    ],
-    correct: "Leonardo da Vinci",
-  },
-  {
-    question: "Which playwright wrote the tragedy 'Romeo and Juliet'?",
-    options: [
-      "William Shakespeare",
-      "George Bernard Shaw",
-      "Oscar Wilde",
-      "Charles Dickens",
-    ],
-    correct: "William Shakespeare",
-  },
-  {
-    question: "Who is known as the father of modern physics?",
-    options: [
-      "Isaac Newton",
-      "Albert Einstein",
-      "Galileo Galilei",
-      "Niels Bohr",
-    ],
-    correct: "Albert Einstein",
-  },
-  {
-    question:
-      "Which ancient wonder of the world was a massive statue of the Greek god Zeus?",
-    options: [
-      "Great Pyramid of Giza",
-      "Hanging Gardens of Babylon",
-      "Statue of Zeus at Olympia",
-      "Colossus of Rhodes",
-    ],
-    correct: "Statue of Zeus at Olympia",
-  },
-  {
-    question: "Who wrote the novel 'Pride and Prejudice'?",
-    options: [
-      "Emily Brontë",
-      "Charlotte Brontë",
-      "Jane Austen",
-      "Louisa May Alcott",
-    ],
-    correct: "Jane Austen",
-  },
+  // ADD UP TO 75 QUESTIONS HERE
 ];
 
+// ------------------------------
+// ELEMENTS
+// ------------------------------
+
 const quizContainer = document.querySelector(".quiz-container");
-const question = document.querySelector(".quiz-container .question");
-const options = document.querySelector(".quiz-container .options");
+const questionEl = document.querySelector(".quiz-container .question");
+const optionsEl = document.querySelector(".quiz-container .options");
 const nextBtn = document.querySelector(".quiz-container .next-btn");
 const quizResult = document.querySelector(".quiz-result");
 const startBtnContainer = document.querySelector(".start-btn-container");
 const startBtn = document.querySelector(".start-btn-container .start-btn");
+const timerDisplay = document.querySelector(".quiz-container .timer");
 
-let questionNumber = 0;
+// ------------------------------
+// STATE
+// ------------------------------
+
+let questionIndex = 0;
 let score = 0;
-const MAX_QUESTIONS = 5;
 let timerInterval;
 
-const shuffleArray = (array) => {
-  return array.slice().sort(() => Math.random() - 0.5);
-};
+// ------------------------------
+// HELPERS
+// ------------------------------
 
-quizData = shuffleArray(quizData);
+const shuffleArray = (arr) => arr.slice().sort(() => Math.random() - 0.5);
 
-const resetLocalStorage = () => {
-  for (i = 0; i < MAX_QUESTIONS; i++) {
-    localStorage.removeItem(`userAnswer_${i}`);
-  }
-};
+quizData = shuffleArray(quizData); // randomize question order
 
-resetLocalStorage();
-
-const checkAnswer = (e) => {
-  let userAnswer = e.target.textContent;
-  if (userAnswer === quizData[questionNumber].correct) {
-    score++;
-    e.target.classList.add("correct");
-  } else {
-    e.target.classList.add("incorrect");
-  }
-
-  localStorage.setItem(`userAnswer_${questionNumber}`, userAnswer);
-
-  let allOptions = document.querySelectorAll(".quiz-container .option");
-  allOptions.forEach((o) => {
-    o.classList.add("disabled");
-  });
-};
-
-const createQuestion = () => {
+function startTimer() {
   clearInterval(timerInterval);
 
-  let secondsLeft = 9;
-  const timerDisplay = document.querySelector(".quiz-container .timer");
+  let secondsLeft = 10;
   timerDisplay.classList.remove("danger");
-
   timerDisplay.textContent = `Time Left: 10 seconds`;
 
   timerInterval = setInterval(() => {
-    timerDisplay.textContent = `Time Left: ${secondsLeft
-      .toString()
-      .padStart(2, "0")} seconds`;
     secondsLeft--;
+    timerDisplay.textContent = `Time Left: ${String(secondsLeft).padStart(2, "0")} seconds`;
 
-    if (secondsLeft < 3) {
-      timerDisplay.classList.add("danger");
-    }
+    if (secondsLeft < 3) timerDisplay.classList.add("danger");
 
     if (secondsLeft < 0) {
       clearInterval(timerInterval);
       displayNextQuestion();
     }
   }, 1000);
+}
 
-  options.innerHTML = "";
-  question.innerHTML = `<span class='question-number'>${
-    questionNumber + 1
-  }/${MAX_QUESTIONS}</span>${quizData[questionNumber].question}`;
+function checkAnswer(e) {
+  const userAnswer = e.target.textContent;
+  const correct = quizData[questionIndex].correct;
 
-  const shuffledOptions = shuffleArray(quizData[questionNumber].options);
-
-  shuffledOptions.forEach((o) => {
-    const option = document.createElement("button");
-    option.classList.add("option");
-    option.innerHTML = o;
-    option.addEventListener("click", (e) => {
-      checkAnswer(e);
-    });
-    options.appendChild(option);
-  });
-};
-
-const retakeQuiz = () => {
-  questionNumber = 0;
-  score = 0;
-  quizData = shuffleArray(quizData);
-  resetLocalStorage();
-
-  createQuestion();
-  quizResult.style.display = "none";
-  quizContainer.style.display = "block";
-};
-
-const displayQuizResult = () => {
-  quizResult.style.display = "flex";
-  quizContainer.style.display = "none";
-  quizResult.innerHTML = "";
-
-  const resultHeading = document.createElement("h2");
-  resultHeading.innerHTML = `You have scored ${score} out of ${MAX_QUESTIONS}.`;
-  quizResult.appendChild(resultHeading);
-
-  for (let i = 0; i < MAX_QUESTIONS; i++) {
-    const resultItem = document.createElement("div");
-    resultItem.classList.add("question-container");
-
-    const userAnswer = localStorage.getItem(`userAnswer_${i}`);
-    const correctAnswer = quizData[i].correct;
-
-    let answeredCorrectly = userAnswer === correctAnswer;
-
-    if (!answeredCorrectly) {
-      resultItem.classList.add("incorrect");
-    }
-
-    resultItem.innerHTML = `<div class="question">Question ${i + 1}: ${
-      quizData[i].question
-    }</div>
-    <div class="user-answer">Your answer: ${userAnswer || "Not Answered"}</div>
-    <div class="correct-answer">Correct answer: ${correctAnswer}</div>`;
-
-    quizResult.appendChild(resultItem);
+  if (userAnswer === correct) {
+    score++;
+    e.target.classList.add("correct");
+  } else {
+    e.target.classList.add("incorrect");
   }
 
-  const retakeBtn = document.createElement("button");
-  retakeBtn.classList.add("retake-btn");
-  retakeBtn.innerHTML = "Retake Quiz";
-  retakeBtn.addEventListener("click", retakeQuiz);
-  quizResult.appendChild(retakeBtn);
-};
+  // disable all options
+  document.querySelectorAll(".option").forEach((btn) => {
+    btn.classList.add("disabled");
+  });
+}
 
-const displayNextQuestion = () => {
-  if (questionNumber >= MAX_QUESTIONS - 1) {
-    displayQuizResult();
+function createQuestion() {
+  startTimer();
+
+  const q = quizData[questionIndex];
+
+  questionEl.innerHTML = `<span class="question-number">Question ${
+    questionIndex + 1
+  }</span> ${q.question}`;
+
+  optionsEl.innerHTML = "";
+
+  shuffleArray(q.options).forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.classList.add("option");
+    btn.textContent = opt;
+    btn.addEventListener("click", checkAnswer);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function displayResults() {
+  quizContainer.style.display = "none";
+  quizResult.style.display = "flex";
+
+  const accuracy = ((score / quizData.length) * 100).toFixed(1);
+
+  quizResult.innerHTML = `
+    <h2>Quiz Complete!</h2>
+    <p>You answered <strong>${score}</strong> out of <strong>${quizData.length}</strong> correctly.</p>
+    <p>Accuracy: <strong>${accuracy}%</strong></p>
+    <button class="retake-btn">Retake Quiz</button>
+  `;
+
+  document.querySelector(".retake-btn").addEventListener("click", () => {
+    questionIndex = 0;
+    score = 0;
+    quizData = shuffleArray(quizData);
+    quizResult.style.display = "none";
+    quizContainer.style.display = "block";
+    createQuestion();
+  });
+}
+
+function displayNextQuestion() {
+  clearInterval(timerInterval);
+
+  if (questionIndex >= quizData.length - 1) {
+    displayResults();
     return;
   }
 
-  questionNumber++;
+  questionIndex++;
   createQuestion();
-};
+}
 
-nextBtn.addEventListener("click", displayNextQuestion);
+// ------------------------------
+// START
+// ------------------------------
 
 startBtn.addEventListener("click", () => {
   startBtnContainer.style.display = "none";
   quizContainer.style.display = "block";
   createQuestion();
 });
+
+nextBtn.addEventListener("click", displayNextQuestion);
