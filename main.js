@@ -1,5 +1,5 @@
 // ------------------------------
-// QUESTIONS
+// QUESTIONS (ADD UP TO 75)
 // ------------------------------
 
 let quizData = [
@@ -7,23 +7,65 @@ let quizData = [
     question: "What is the worst error detection method?",
     options: ["Echo check", "Parity Bit", "Checksum", "ARQ"],
     correct: "Echo check",
+    points: 1,
   },
   {
     question: "What is the *best* Paper 1 unit in the CS syllabus?",
-    options: ["Data representation", "Boolean Logic", "Automated Systens & Emerging Technologies", "None. Theory is boring."],
+    options: [
+      "Data representation",
+      "Boolean Logic",
+      "Automated Systens & Emerging Technologies",
+      "None. Theory is boring.",
+    ],
     correct: "Data representation",
+    points: 1,
   },
   {
     question: "Convert the denary number 04022026 to binary (22 digit):",
-    options: ["1111001011011110101110", "1111010101111100001010", "0111101010110101101011", "..Overflow?"],
+    options: [
+      "1111001011011110101110",
+      "1111010101111100001010",
+      "0111101010110101101011",
+      "..Overflow?",
+    ],
     correct: "1111010101111100001010",
+    points: 3,
   },
   {
     question: "Guess the answer.",
     options: ["A", "B", "C", "D"],
     correct: "B",
+    points: 1,
   },
-  // ADD UP TO 75 QUESTIONS HERE
+  {
+    question: "What is the *worst* CS unit in the syllabus?",
+    options: [
+      "Hardware",
+      "Software",
+      "The internet and its uses",
+      "Programming (on paper)",
+    ],
+    correct: null",
+    points: 1,
+    troll: true, // GETS POINTS IF YOU DO NOT ANSWER THE QUESTION
+  
+  // TODO: add troll message box in HTML later
+// <div class="troll-message"></div>
+  {
+    question: "What is the coolest input device?",
+    options: ["Mouse", "Keyboard", "Touchscreen", "Microphone"],
+    correct: "Keyboard",
+    points: 1,
+  },
+  {
+    question: "What is the best loop in PSEUDOCODE?",
+    options: ["REPEAT-UNTIL loop", "WHILE loop", "FOR loop", "Everything but REPEAT UNTIL!!!"],
+    correct: "Everything but REPEAT UNTIL!!!",
+    points: 1,
+  },
+
+  
+  // ADD THE REST OF YOUR 75 QUESTIONS HERE
 ];
 
 // ------------------------------
@@ -47,13 +89,32 @@ let questionIndex = 0;
 let score = 0;
 let timerInterval;
 
+// total possible points (auto-calculated)
+let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
+
 // ------------------------------
 // HELPERS
 // ------------------------------
 
 const shuffleArray = (arr) => arr.slice().sort(() => Math.random() - 0.5);
 
-quizData = shuffleArray(quizData); // randomize question order
+// randomize question order
+quizData = shuffleArray(quizData);
+
+// ⭐ AUTO-CORRECT FUNCTION (for troll question)
+function autoCorrect() {
+  score += quizData[questionIndex].points;
+
+  const correctAnswer = quizData[questionIndex].correct;
+
+  document.querySelectorAll(".option").forEach((btn) => {
+    if (btn.textContent === correctAnswer) {
+      btn.classList.add("correct");
+    } else {
+      btn.classList.add("disabled");
+    }
+  });
+}
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -64,13 +125,23 @@ function startTimer() {
 
   timerInterval = setInterval(() => {
     secondsLeft--;
-    timerDisplay.textContent = `Time Left: ${String(secondsLeft).padStart(2, "0")} seconds`;
+    timerDisplay.textContent = `Time Left: ${String(secondsLeft).padStart(
+      2,
+      "0"
+    )} seconds`;
 
     if (secondsLeft < 3) timerDisplay.classList.add("danger");
 
     if (secondsLeft < 0) {
       clearInterval(timerInterval);
-      displayNextQuestion();
+
+      // ⭐ ONLY auto-correct if this question is marked as troll
+      if (quizData[questionIndex].troll === true) {
+        autoCorrect();
+        setTimeout(displayNextQuestion, 800);
+      } else {
+        displayNextQuestion();
+      }
     }
   }, 1000);
 }
@@ -80,7 +151,7 @@ function checkAnswer(e) {
   const correct = quizData[questionIndex].correct;
 
   if (userAnswer === correct) {
-    score++;
+    score += quizData[questionIndex].points; // POINT SYSTEM
     e.target.classList.add("correct");
   } else {
     e.target.classList.add("incorrect");
@@ -97,9 +168,11 @@ function createQuestion() {
 
   const q = quizData[questionIndex];
 
-  questionEl.innerHTML = `<span class="question-number">Question ${
-    questionIndex + 1
-  }</span> ${q.question}`;
+  questionEl.innerHTML = `
+    <span class="question-number">Question ${questionIndex + 1}</span>
+    <span class="question-points">(${q.points} pts)</span>
+    ${q.question}
+  `;
 
   optionsEl.innerHTML = "";
 
@@ -116,11 +189,11 @@ function displayResults() {
   quizContainer.style.display = "none";
   quizResult.style.display = "flex";
 
-  const accuracy = ((score / quizData.length) * 100).toFixed(1);
+  const accuracy = ((score / totalPossiblePoints) * 100).toFixed(1);
 
   quizResult.innerHTML = `
     <h2>Quiz Complete!</h2>
-    <p>You answered <strong>${score}</strong> out of <strong>${quizData.length}</strong> correctly.</p>
+    <p>You earned <strong>${score}</strong> out of <strong>${totalPossiblePoints}</strong> points.</p>
     <p>Accuracy: <strong>${accuracy}%</strong></p>
     <button class="retake-btn">Retake Quiz</button>
   `;
