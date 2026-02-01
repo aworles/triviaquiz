@@ -45,13 +45,10 @@ let quizData = [
       "The internet and its uses",
       "Programming (on paper)",
     ],
-    correct: null, // FIXED SYNTAX
+    correct: null,
     points: 1,
-    troll: true, // ONLY CORRECT IF UNANSWERED
+    troll: true, // ONLY correct if unanswered
   },
-
-  // TODO: add troll message box in HTML later
-  // <div class="troll-message"></div>
 
   {
     question: "What is the coolest input device?",
@@ -102,9 +99,11 @@ let quizData = [
 // ------------------------------
 
 const quizContainer = document.querySelector(".quiz-container");
-const questionEl = document.querySelector(".quiz-container .question");
-const optionsEl = document.querySelector(".quiz-container .options");
-const nextBtn = document.querySelector(".quiz-container .next-btn");
+const questionEl = document.querySelector(".question");
+const pointsBadge = document.querySelector(".question-points");
+const optionsEl = document.querySelector(".options");
+const nextBtn = document.querySelector(".next-btn");
+const backBtn = document.querySelector(".back-btn");
 const quizResult = document.querySelector(".quiz-result");
 const startBtnContainer = document.querySelector(".start-btn-container");
 const startBtn = document.querySelector(".start-btn-container .start-btn");
@@ -116,17 +115,14 @@ const startBtn = document.querySelector(".start-btn-container .start-btn");
 let questionIndex = 0;
 let score = 0;
 
+// store user answers
+let userAnswers = Array(quizData.length).fill(null);
+
 // total possible points
 let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
 
-// ------------------------------
-// HELPERS
-// ------------------------------
-
-const shuffleArray = (arr) => arr.slice().sort(() => Math.random() - 0.5);
-
-// randomize question order
-quizData = shuffleArray(quizData);
+// shuffle questions
+quizData = quizData.sort(() => Math.random() - 0.5);
 
 // ------------------------------
 // CHECK ANSWER
@@ -134,13 +130,23 @@ quizData = shuffleArray(quizData);
 
 function checkAnswer(e) {
   const q = quizData[questionIndex];
+  const userAnswer = e.target.textContent;
 
-  // ⭐ TROLL QUESTION: ANY answer = wrong
+  // remove previous score if changing answer
+  if (userAnswers[questionIndex] !== null) {
+    const prev = userAnswers[questionIndex];
+    if (prev === q.correct) {
+      score -= q.points;
+    }
+  }
+
+  // save new answer
+  userAnswers[questionIndex] = userAnswer;
+
+  // troll question: ANY answer is wrong
   if (q.troll === true) {
     e.target.classList.add("incorrect");
   } else {
-    const userAnswer = e.target.textContent;
-
     if (userAnswer === q.correct) {
       score += q.points;
       e.target.classList.add("correct");
@@ -164,19 +170,33 @@ function createQuestion() {
 
   questionEl.innerHTML = `
     <span class="question-number">Question ${questionIndex + 1}</span>
-    <span class="question-points">(${q.points} pts)</span>
     ${q.question}
   `;
 
+  pointsBadge.textContent = `${q.points} pts`;
+
   optionsEl.innerHTML = "";
 
-  shuffleArray(q.options).forEach((opt) => {
+  q.options.forEach((opt) => {
     const btn = document.createElement("button");
     btn.classList.add("option");
     btn.textContent = opt;
     btn.addEventListener("click", checkAnswer);
     optionsEl.appendChild(btn);
   });
+
+  // reapply saved answer if going back
+  const saved = userAnswers[questionIndex];
+  if (saved !== null) {
+    document.querySelectorAll(".option").forEach((btn) => {
+      if (btn.textContent === saved) {
+        btn.classList.add(
+          saved === q.correct && !q.troll ? "correct" : "incorrect"
+        );
+      }
+      btn.classList.add("disabled");
+    });
+  }
 }
 
 // ------------------------------
@@ -199,7 +219,8 @@ function displayResults() {
   document.querySelector(".retake-btn").addEventListener("click", () => {
     questionIndex = 0;
     score = 0;
-    quizData = shuffleArray(quizData);
+    userAnswers = Array(quizData.length).fill(null);
+    quizData = quizData.sort(() => Math.random() - 0.5);
     quizResult.style.display = "none";
     quizContainer.style.display = "block";
     createQuestion();
@@ -213,12 +234,8 @@ function displayResults() {
 function displayNextQuestion() {
   const q = quizData[questionIndex];
 
-  // TROLL QUESTION: if unanswered → give points
-  const anyAnswered = [...document.querySelectorAll(".option")].some(
-    (btn) => btn.classList.contains("correct") || btn.classList.contains("incorrect")
-  );
-
-  if (q.troll === true && !anyAnswered) {
+  // troll question: if unanswered → give points
+  if (q.troll === true && userAnswers[questionIndex] === null) {
     score += q.points;
   }
 
@@ -228,6 +245,17 @@ function displayNextQuestion() {
   }
 
   questionIndex++;
+  createQuestion();
+}
+
+// ------------------------------
+// BACK QUESTION
+// ------------------------------
+
+function goToPreviousQuestion() {
+  if (questionIndex === 0) return;
+
+  questionIndex--;
   createQuestion();
 }
 
@@ -242,3 +270,4 @@ startBtn.addEventListener("click", () => {
 });
 
 nextBtn.addEventListener("click", displayNextQuestion);
+backBtn.addEventListener("click", goToPreviousQuestion);
