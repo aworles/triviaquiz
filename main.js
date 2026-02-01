@@ -45,12 +45,14 @@ let quizData = [
       "The internet and its uses",
       "Programming (on paper)",
     ],
-    correct: null",
+    correct: null, // FIXED SYNTAX
     points: 1,
-    troll: true, // GETS POINTS IF YOU DO NOT ANSWER THE QUESTION
-  
+    troll: true, // ONLY CORRECT IF UNANSWERED
+  },
+
   // TODO: add troll message box in HTML later
-// <div class="troll-message"></div>
+  // <div class="troll-message"></div>
+
   {
     question: "What is the coolest input device?",
     options: ["Mouse", "Keyboard", "Touchscreen", "Microphone"],
@@ -59,7 +61,12 @@ let quizData = [
   },
   {
     question: "What is the exact date of the FIRST ever CS assignment given on MS Teams?",
-    options: ["Friday, November 15th 2024", "Wednesday, November 20th 2024", "Tuesday, October 29th 2024", "Thursday, November 14th 2024"],
+    options: [
+      "Friday, November 15th 2024",
+      "Wednesday, November 20th 2024",
+      "Tuesday, October 29th 2024",
+      "Thursday, November 14th 2024",
+    ],
     correct: "Friday, November 15th 2024",
     points: 1,
   },
@@ -77,11 +84,16 @@ let quizData = [
   },
   {
     question: "What is the exact date of the Y10 End of Year Exam?",
-    options: ["Tuesday 27 May at 13:30", "Wednesday 28 May at 12:45", "Friday 30 May at 13:30", "Monday 26 May at 11:30"],
+    options: [
+      "Tuesday 27 May at 13:30",
+      "Wednesday 28 May at 12:45",
+      "Friday 30 May at 13:30",
+      "Monday 26 May at 11:30",
+    ],
     correct: "Tuesday 27 May at 13:30",
     points: 1,
   },
-  
+
   // ADD THE REST OF YOUR 75 QUESTIONS HERE
 ];
 
@@ -96,7 +108,6 @@ const nextBtn = document.querySelector(".quiz-container .next-btn");
 const quizResult = document.querySelector(".quiz-result");
 const startBtnContainer = document.querySelector(".start-btn-container");
 const startBtn = document.querySelector(".start-btn-container .start-btn");
-const timerDisplay = document.querySelector(".quiz-container .timer");
 
 // ------------------------------
 // STATE
@@ -104,9 +115,8 @@ const timerDisplay = document.querySelector(".quiz-container .timer");
 
 let questionIndex = 0;
 let score = 0;
-let timerInterval;
 
-// total possible points (auto-calculated)
+// total possible points
 let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
 
 // ------------------------------
@@ -118,60 +128,25 @@ const shuffleArray = (arr) => arr.slice().sort(() => Math.random() - 0.5);
 // randomize question order
 quizData = shuffleArray(quizData);
 
-// ⭐ AUTO-CORRECT FUNCTION (for troll question)
-function autoCorrect() {
-  score += quizData[questionIndex].points;
-
-  const correctAnswer = quizData[questionIndex].correct;
-
-  document.querySelectorAll(".option").forEach((btn) => {
-    if (btn.textContent === correctAnswer) {
-      btn.classList.add("correct");
-    } else {
-      btn.classList.add("disabled");
-    }
-  });
-}
-
-function startTimer() {
-  clearInterval(timerInterval);
-
-  let secondsLeft = 10;
-  timerDisplay.classList.remove("danger");
-  timerDisplay.textContent = `Time Left: 10 seconds`;
-
-  timerInterval = setInterval(() => {
-    secondsLeft--;
-    timerDisplay.textContent = `Time Left: ${String(secondsLeft).padStart(
-      2,
-      "0"
-    )} seconds`;
-
-    if (secondsLeft < 3) timerDisplay.classList.add("danger");
-
-    if (secondsLeft < 0) {
-      clearInterval(timerInterval);
-
-      // ⭐ ONLY auto-correct if this question is marked as troll
-      if (quizData[questionIndex].troll === true) {
-        autoCorrect();
-        setTimeout(displayNextQuestion, 800);
-      } else {
-        displayNextQuestion();
-      }
-    }
-  }, 1000);
-}
+// ------------------------------
+// CHECK ANSWER
+// ------------------------------
 
 function checkAnswer(e) {
-  const userAnswer = e.target.textContent;
-  const correct = quizData[questionIndex].correct;
+  const q = quizData[questionIndex];
 
-  if (userAnswer === correct) {
-    score += quizData[questionIndex].points; // POINT SYSTEM
-    e.target.classList.add("correct");
-  } else {
+  // ⭐ TROLL QUESTION: ANY answer = wrong
+  if (q.troll === true) {
     e.target.classList.add("incorrect");
+  } else {
+    const userAnswer = e.target.textContent;
+
+    if (userAnswer === q.correct) {
+      score += q.points;
+      e.target.classList.add("correct");
+    } else {
+      e.target.classList.add("incorrect");
+    }
   }
 
   // disable all options
@@ -180,9 +155,11 @@ function checkAnswer(e) {
   });
 }
 
-function createQuestion() {
-  startTimer();
+// ------------------------------
+// CREATE QUESTION
+// ------------------------------
 
+function createQuestion() {
   const q = quizData[questionIndex];
 
   questionEl.innerHTML = `
@@ -201,6 +178,10 @@ function createQuestion() {
     optionsEl.appendChild(btn);
   });
 }
+
+// ------------------------------
+// RESULTS
+// ------------------------------
 
 function displayResults() {
   quizContainer.style.display = "none";
@@ -225,8 +206,21 @@ function displayResults() {
   });
 }
 
+// ------------------------------
+// NEXT QUESTION
+// ------------------------------
+
 function displayNextQuestion() {
-  clearInterval(timerInterval);
+  const q = quizData[questionIndex];
+
+  // TROLL QUESTION: if unanswered → give points
+  const anyAnswered = [...document.querySelectorAll(".option")].some(
+    (btn) => btn.classList.contains("correct") || btn.classList.contains("incorrect")
+  );
+
+  if (q.troll === true && !anyAnswered) {
+    score += q.points;
+  }
 
   if (questionIndex >= quizData.length - 1) {
     displayResults();
