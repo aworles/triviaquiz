@@ -9,9 +9,19 @@ let quizData = [
     correct: "Echo check",
   },
   {
-    question: "Example question 2?",
+    question: "What is the *best* Paper 1 unit in the CS syllabus?",
+    options: ["Data representation", "Boolean Logic", "Automated Systens & Emerging Technologies", "None. Theory is boring."],
+    correct: "Data representation",
+  },
+  {
+    question: "Convert the denary number 04022026 to binary (22 digit):",
+    options: ["1111001011011110101110", "1111010101111100001010", "0111101010110101101011", "..Overflow?"],
+    correct: "1111010101111100001010",
+  },
+  {
+    question: "Guess the answer.",
     options: ["A", "B", "C", "D"],
-    correct: "C",
+    correct: "B",
   },
   // ADD UP TO 75 QUESTIONS HERE
 ];
