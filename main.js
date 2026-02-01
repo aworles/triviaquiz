@@ -185,7 +185,7 @@ function createQuestion() {
     optionsEl.appendChild(btn);
   });
 
-  // reapply saved answer if going back
+  // ⭐ Reapply saved answer if going back
   const saved = userAnswers[questionIndex];
   if (saved !== null) {
     document.querySelectorAll(".option").forEach((btn) => {
@@ -196,6 +196,15 @@ function createQuestion() {
       }
       btn.classList.add("disabled");
     });
+  }
+
+  // Add button to end quiz by the end
+  if (questionIndex === quizData.length - 1) {
+    nextBtn.textContent = "End Quiz";
+    nextBtn.classList.add("end-btn");
+  } else {
+    nextBtn.textContent = "Next";
+    nextBtn.classList.remove("end-btn");
   }
 }
 
@@ -234,11 +243,12 @@ function displayResults() {
 function displayNextQuestion() {
   const q = quizData[questionIndex];
 
-  // troll question: if unanswered → give points
+  // Troll question: if unanswered → give points
   if (q.troll === true && userAnswers[questionIndex] === null) {
     score += q.points;
   }
 
+  // If already at last question → end quiz
   if (questionIndex >= quizData.length - 1) {
     displayResults();
     return;
@@ -246,6 +256,15 @@ function displayNextQuestion() {
 
   questionIndex++;
   createQuestion();
+
+  // If now on last question → change button to "End Quiz"
+  if (questionIndex === quizData.length - 1) {
+    nextBtn.textContent = "End Quiz";
+    nextBtn.classList.add("end-btn");
+  } else {
+    nextBtn.textContent = "Next";
+    nextBtn.classList.remove("end-btn");
+  }
 }
 
 // ------------------------------
