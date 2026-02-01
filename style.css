@@ -27,6 +27,7 @@ body {
   font-family: "Syne", sans-serif;
   font-size: 52px;
   font-weight: 500;
+  font-stretch: 85%,
   letter-spacing: 0px;
   transform: scaleX(1);
   margin-bottom: 10px;
