@@ -38,7 +38,7 @@ let quizData = [
     points: 1,
   },
   {
-    question: "What is the *worst* CS unit in the syllabus?",
+    question: "What is the *worst* CS unit in the syllabus? (Hint: It's none.. obviously.)",
     options: [
       "Hardware",
       "Software",
@@ -58,12 +58,29 @@ let quizData = [
     points: 1,
   },
   {
-    question: "What is the best loop in PSEUDOCODE?",
-    options: ["REPEAT-UNTIL loop", "WHILE loop", "FOR loop", "Everything but REPEAT UNTIL!!!"],
-    correct: "Everything but REPEAT UNTIL!!!",
+    question: "What is the exact date of the FIRST ever CS assignment given on MS Teams?",
+    options: ["Friday, November 15th 2024", "Wednesday, November 20th 2024", "Tuesday, October 29th 2024", "Thursday, November 14th 2024"],
+    correct: "Friday, November 15th 2024",
     points: 1,
   },
-
+  {
+    question: "What is one of the first homeworks given about Python in MS Teams that not many knew how to complete?",
+    options: ["Bingo Project", "Fibonacci Sequence", "Validation Checks", "1D Arrays"],
+    correct: "Fibonacci Sequence",
+    points: 1,
+  },
+  {
+    question: "What was the first 15 marker (Paper 2) exercise that we looked at about?",
+    options: ["Temperatures", "Mountains", "Matches", "Competitors"],
+    correct: "Temperatures",
+    points: 1,
+  },
+  {
+    question: "What is the exact date of the Y10 End of Year Exam?",
+    options: ["Tuesday 27 May at 13:30", "Wednesday 28 May at 12:45", "Friday 30 May at 13:30", "Monday 26 May at 11:30"],
+    correct: "Tuesday 27 May at 13:30",
+    points: 1,
+  },
   
   // ADD THE REST OF YOUR 75 QUESTIONS HERE
 ];
