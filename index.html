@@ -15,18 +15,22 @@
 
   <!-- ⭐ GOAL LINE -->
   <div id="goal-line">
-    <span class="goal-item">GOAL: A* -> 80% accuracy</span>
+    <span class="goal-item">GOAL: 80% accuracy</span>
     <span class="goal-sep">—</span>
     <span class="goal-item">Complete all questions</span>
   </div>
 
   <!-- START SCREEN -->
   <div class="start-btn-container">
+    <p class="rules-text">
+      Answer all questions. You must reach <strong>80% accuracy</strong> to unlock the code.
+    </p>
     <button class="start-btn">Start Quiz</button>
   </div>
 
   <!-- QUIZ -->
   <div class="quiz-container" style="display:none;">
+
     <div class="question-header">
       <span class="question"></span>
       <span class="question-points"></span>
@@ -38,12 +42,13 @@
       <button class="back-btn">Back</button>
       <button class="next-btn">Next</button>
     </div>
+
   </div>
 
   <!-- RESULTS -->
   <div class="quiz-result" style="display:none;"></div>
 
-  <!-- ⭐ CONFETTI -->
+  <!-- CONFETTI -->
   <div id="confetti-container"></div>
 
   <script src="main.js"></script>
