@@ -1,56 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trivia Quiz</title>
+  <head>
+    <link rel="icon" type="image/png" href="tt_logo.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trivia Quiz</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+    <!-- Syne for title, Roboto for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-<body>
+    <!-- IMPORTANT: this must match your actual file name -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  <h1 class="quiz-title">Trivia Quiz</h1>
-
-  <!-- ⭐ GOAL LINE -->
-  <div id="goal-line">
-    <span class="goal-item">GOAL: 80% accuracy</span>
-    <span class="goal-sep">—</span>
-    <span class="goal-item">Complete all questions</span>
-  </div>
-
-  <!-- START SCREEN -->
-  <div class="start-btn-container">
-    <p class="rules-text">
-      Answer all questions. You must reach <strong>80% accuracy</strong> to unlock the code.
-    </p>
-    <button class="start-btn">Start Quiz</button>
-  </div>
-
-  <!-- QUIZ -->
-  <div class="quiz-container" style="display:none;">
-
-    <div class="question-header">
-      <span class="question"></span>
-      <span class="question-points"></span>
+  <body>
+    <!-- INTRO / START SCREEN -->
+    <div class="start-btn-container">
+      <h2>Trivia Quiz</h2>
+      <p>
+        A multiple-choice quiz with an unknown number of questions.<br>
+        Estimated time to complete: 30 minutes.<br>
+        The use of external sources is allowed. Good luck.
+      </p>
+      <p class="rules-text">
+        Goal: <strong>Complete all questions with at least 80% accuracy</strong> to unlock the code.
+      </p>
+      <button class="start-btn">Start</button>
     </div>
 
-    <div class="options"></div>
+    <!-- MAIN QUIZ AREA -->
+    <main>
+      <!-- Title + goal line -->
+      <h1 class="quiz-title">Trivia Quiz</h1>
 
-    <div class="nav-buttons">
-      <button class="back-btn">Back</button>
-      <button class="next-btn">Next</button>
-    </div>
+      <div id="goal-line">
+        <span class="goal-item">GOAL: A* → 80% accuracy</span>
+        <span class="goal-sep">—</span>
+        <span class="goal-item">Complete all questions</span>
+      </div>
 
-  </div>
+      <!-- QUIZ CONTAINER -->
+      <div class="quiz-container" style="display:none;">
+        <div class="question-header">
+          <span class="question"></span>
+          <span class="question-points"></span>
+        </div>
 
-  <!-- RESULTS -->
-  <div class="quiz-result" style="display:none;"></div>
+        <div class="options"></div>
 
-  <!-- CONFETTI -->
-  <div id="confetti-container"></div>
+        <div class="nav-buttons">
+          <button class="back-btn">Back</button>
+          <button class="next-btn">Next</button>
+        </div>
+      </div>
 
-  <script src="main.js"></script>
-</body>
+      <!-- RESULTS -->
+      <div class="quiz-result" style="display:none;"></div>
+    </main>
+
+    <!-- CONFETTI -->
+    <div id="confetti-container"></div>
+
+    <!-- JS -->
+    <script src="main.js"></script>
+  </body>
 </html>
