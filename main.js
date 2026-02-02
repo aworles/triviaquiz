@@ -1,5 +1,5 @@
 // ------------------------------
-// QUESTIONS (ADD UP TO 75)
+// QUESTIONS
 // ------------------------------
 
 let quizData = [
@@ -29,7 +29,7 @@ let quizData = [
       "..Overflow?",
     ],
     correct: "1111010101111100001010",
-    points: 3,
+    points: 1,
   },
   {
     question: "Guess the answer.",
@@ -47,7 +47,7 @@ let quizData = [
     ],
     correct: null,
     points: 1,
-    troll: true, // ONLY correct if unanswered
+    troll: true,
   },
 
   {
@@ -90,8 +90,6 @@ let quizData = [
     correct: "Tuesday 27 May at 13:30",
     points: 1,
   },
-
-  // ADD THE REST OF YOUR 75 QUESTIONS HERE
 ];
 
 // ------------------------------
@@ -114,15 +112,38 @@ const startBtn = document.querySelector(".start-btn-container .start-btn");
 
 let questionIndex = 0;
 let score = 0;
+let goalCode = "---"; // ⭐ unlockable code
 
-// store user answers
 let userAnswers = Array(quizData.length).fill(null);
 
-// total possible points
 let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
 
-// shuffle questions
 quizData = quizData.sort(() => Math.random() - 0.5);
+
+// ------------------------------
+// CONFETTI
+// ------------------------------
+
+function baguetteConfetti() {
+  const container = document.getElementById("confetti-container");
+
+  for (let i = 0; i < 120; i++) {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "baguette";
+
+      const icons = ["🥖", "🥐"];
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = (1.5 + Math.random() * 2.5) + "rem";
+      el.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 8000);
+    }, i * 20);
+  }
+}
 
 // ------------------------------
 // CHECK ANSWER
@@ -132,7 +153,6 @@ function checkAnswer(e) {
   const q = quizData[questionIndex];
   const userAnswer = e.target.textContent;
 
-  // remove previous score if changing answer
   if (userAnswers[questionIndex] !== null) {
     const prev = userAnswers[questionIndex];
     if (prev === q.correct) {
@@ -140,10 +160,8 @@ function checkAnswer(e) {
     }
   }
 
-  // save new answer
   userAnswers[questionIndex] = userAnswer;
 
-  // troll question: ANY answer is wrong
   if (q.troll === true) {
     e.target.classList.add("incorrect");
   } else {
@@ -155,7 +173,6 @@ function checkAnswer(e) {
     }
   }
 
-  // disable all options
   document.querySelectorAll(".option").forEach((btn) => {
     btn.classList.add("disabled");
   });
@@ -185,20 +202,16 @@ function createQuestion() {
     optionsEl.appendChild(btn);
   });
 
-  // ⭐ Reapply saved answer if going back
   const saved = userAnswers[questionIndex];
   if (saved !== null) {
     document.querySelectorAll(".option").forEach((btn) => {
       if (btn.textContent === saved) {
-        btn.classList.add(
-          saved === q.correct && !q.troll ? "correct" : "incorrect"
-        );
+        btn.classList.add(saved === q.correct && !q.troll ? "correct" : "incorrect");
       }
       btn.classList.add("disabled");
     });
   }
 
-  // Add button to end quiz by the end
   if (questionIndex === quizData.length - 1) {
     nextBtn.textContent = "End Quiz";
     nextBtn.classList.add("end-btn");
@@ -209,7 +222,7 @@ function createQuestion() {
 }
 
 // ------------------------------
-// RESULTS
+// RESULTS + GOAL CHECK
 // ------------------------------
 
 function displayResults() {
@@ -218,10 +231,29 @@ function displayResults() {
 
   const accuracy = ((score / totalPossiblePoints) * 100).toFixed(1);
 
+  let goalAchieved = accuracy >= 80;
+
+  // ⭐ Unlock code + confetti
+  if (goalAchieved && goalCode === "---") {
+    goalCode = "S20"; // your code
+    baguetteConfetti();
+  }
+
   quizResult.innerHTML = `
     <h2>Quiz Complete!</h2>
     <p>You earned <strong>${score}</strong> out of <strong>${totalPossiblePoints}</strong> points.</p>
     <p>Accuracy: <strong>${accuracy}%</strong></p>
+
+    <p style="margin-top:10px; font-size:18px; opacity:0.9;">
+      ${goalAchieved 
+        ? "Goal Achieved: 80% Accuracy!" 
+        : "Quiz failed."}
+    </p>
+
+    <p style="margin-top:12px; font-size:22px; font-weight:600;">
+      Code: ${goalCode}
+    </p>
+
     <button class="retake-btn">Retake Quiz</button>
   `;
 
@@ -243,12 +275,10 @@ function displayResults() {
 function displayNextQuestion() {
   const q = quizData[questionIndex];
 
-  // Troll question: if unanswered → give points
   if (q.troll === true && userAnswers[questionIndex] === null) {
     score += q.points;
   }
 
-  // If already at last question → end quiz
   if (questionIndex >= quizData.length - 1) {
     displayResults();
     return;
@@ -257,7 +287,6 @@ function displayNextQuestion() {
   questionIndex++;
   createQuestion();
 
-  // If now on last question → change button to "End Quiz"
   if (questionIndex === quizData.length - 1) {
     nextBtn.textContent = "End Quiz";
     nextBtn.classList.add("end-btn");
