@@ -6,58 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trivia Quiz</title>
 
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <!-- Your CSS -->
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
 
-    <!-- ⭐ INTRO SCREEN (KEEP THIS) -->
+    <!-- INTRO SCREEN -->
     <div class="start-btn-container">
       <h2>Trivia Quiz</h2>
       <p>
         A multiple-choice quiz with an unknown number of questions.<br>
-        Estimated time to complete: 30 minutes.<br>
-        External sources are allowed. Good luck.
+        Estimated time: 30 minutes.<br>
+        External sources allowed.
       </p>
       <p class="rules-text">
-        Goal: <strong>Complete all questions with at least 80% accuracy</strong> to unlock the code.
+        Goal: <strong>80% accuracy</strong> to unlock the code.
       </p>
       <button class="start-btn">Start</button>
     </div>
 
-    <!-- ⭐ MAIN QUIZ AREA -->
-    <main>
+    <!-- QUIZ -->
+    <div class="quiz-container" style="display:none;">
 
-      <!-- ⭐ QUIZ CONTAINER (ONLY ONE) -->
-      <div class="quiz-container" style="display:none;">
-
-        <div class="question-header">
-          <span class="question"></span>
-          <span class="question-points"></span>
-        </div>
-
-        <div class="options"></div>
-
-        <div class="nav-buttons">
-          <button class="back-btn">Back</button>
-          <button class="next-btn">Next</button>
-        </div>
-
+      <div class="question-header">
+        <span class="question"></span>
+        <span class="question-points"></span>
       </div>
 
-      <!-- ⭐ RESULTS -->
-      <div class="quiz-result" style="display:none;"></div>
+      <div class="options"></div>
 
-    </main>
+      <div class="nav-buttons">
+        <button class="back-btn">Back</button>
+        <button class="next-btn">Next</button>
+      </div>
 
-    <!-- ⭐ CONFETTI -->
+    </div>
+
+    <!-- RESULTS -->
+    <div class="quiz-result" style="display:none;"></div>
+
+    <!-- CONFETTI -->
     <div id="confetti-container"></div>
 
-    <!-- JS -->
     <script src="main.js"></script>
   </body>
 </html>
