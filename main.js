@@ -14,7 +14,7 @@ let quizData = [
     options: [
       "Data representation",
       "Boolean Logic",
-      "Automated Systens & Emerging Technologies",
+      "Automated Systems & Emerging Technologies",
       "None. Theory is boring.",
     ],
     correct: "Data representation",
@@ -29,7 +29,7 @@ let quizData = [
       "..Overflow?",
     ],
     correct: "1111010101111100001010",
-    points: 1,
+    points: 3,
   },
   {
     question: "Guess the answer.",
@@ -49,47 +49,6 @@ let quizData = [
     points: 1,
     troll: true,
   },
-
-  {
-    question: "What is the coolest input device?",
-    options: ["Mouse", "Keyboard", "Touchscreen", "Microphone"],
-    correct: "Keyboard",
-    points: 1,
-  },
-  {
-    question: "What is the exact date of the FIRST ever CS assignment given on MS Teams?",
-    options: [
-      "Friday, November 15th 2024",
-      "Wednesday, November 20th 2024",
-      "Tuesday, October 29th 2024",
-      "Thursday, November 14th 2024",
-    ],
-    correct: "Friday, November 15th 2024",
-    points: 1,
-  },
-  {
-    question: "What is one of the first homeworks given about Python in MS Teams that not many knew how to complete?",
-    options: ["Bingo Project", "Fibonacci Sequence", "Validation Checks", "1D Arrays"],
-    correct: "Fibonacci Sequence",
-    points: 1,
-  },
-  {
-    question: "What was the first 15 marker (Paper 2) exercise that we looked at about?",
-    options: ["Temperatures", "Mountains", "Matches", "Competitors"],
-    correct: "Temperatures",
-    points: 1,
-  },
-  {
-    question: "What is the exact date of the Y10 End of Year Exam?",
-    options: [
-      "Tuesday 27 May at 13:30",
-      "Wednesday 28 May at 12:45",
-      "Friday 30 May at 13:30",
-      "Monday 26 May at 11:30",
-    ],
-    correct: "Tuesday 27 May at 13:30",
-    points: 1,
-  },
 ];
 
 // ------------------------------
@@ -104,7 +63,7 @@ const nextBtn = document.querySelector(".next-btn");
 const backBtn = document.querySelector(".back-btn");
 const quizResult = document.querySelector(".quiz-result");
 const startBtnContainer = document.querySelector(".start-btn-container");
-const startBtn = document.querySelector(".start-btn-container .start-btn");
+const startBtn = document.querySelector(".start-btn");
 
 // ------------------------------
 // STATE
@@ -112,7 +71,7 @@ const startBtn = document.querySelector(".start-btn-container .start-btn");
 
 let questionIndex = 0;
 let score = 0;
-let goalCode = "---"; // ⭐ unlockable code
+let goalCode = "---";
 
 let userAnswers = Array(quizData.length).fill(null);
 
@@ -121,7 +80,7 @@ let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
 quizData = quizData.sort(() => Math.random() - 0.5);
 
 // ------------------------------
-// CONFETTI
+// CONFETTI (TAB CASINO VERSION)
 // ------------------------------
 
 function baguetteConfetti() {
@@ -153,6 +112,7 @@ function checkAnswer(e) {
   const q = quizData[questionIndex];
   const userAnswer = e.target.textContent;
 
+  // remove previous score if changing answer
   if (userAnswers[questionIndex] !== null) {
     const prev = userAnswers[questionIndex];
     if (prev === q.correct) {
@@ -186,7 +146,7 @@ function createQuestion() {
   const q = quizData[questionIndex];
 
   questionEl.innerHTML = `
-    <span class="question-number">Question ${questionIndex + 1}</span>
+    <span class="question-number">Question ${questionIndex + 1}</span><br>
     ${q.question}
   `;
 
@@ -202,6 +162,7 @@ function createQuestion() {
     optionsEl.appendChild(btn);
   });
 
+  // restore previous answer
   const saved = userAnswers[questionIndex];
   if (saved !== null) {
     document.querySelectorAll(".option").forEach((btn) => {
@@ -212,6 +173,7 @@ function createQuestion() {
     });
   }
 
+  // last question → change button
   if (questionIndex === quizData.length - 1) {
     nextBtn.textContent = "End Quiz";
     nextBtn.classList.add("end-btn");
@@ -230,13 +192,11 @@ function displayResults() {
   quizResult.style.display = "flex";
 
   const accuracy = ((score / totalPossiblePoints) * 100).toFixed(1);
+  const goalAchieved = accuracy >= 80;
 
-  let goalAchieved = accuracy >= 80;
-
-  // ⭐ Unlock code + confetti
   if (goalAchieved && goalCode === "---") {
-    goalCode = "S20"; // your code
     baguetteConfetti();
+    goalCode = "49201"; // your code
   }
 
   quizResult.innerHTML = `
@@ -245,9 +205,7 @@ function displayResults() {
     <p>Accuracy: <strong>${accuracy}%</strong></p>
 
     <p style="margin-top:10px; font-size:18px; opacity:0.9;">
-      ${goalAchieved 
-        ? "Goal Achieved: 80% Accuracy!" 
-        : "Quiz failed."}
+      ${goalAchieved ? "🎉 Goal Achieved: 80% Accuracy!" : "Goal not reached — try again!"}
     </p>
 
     <p style="margin-top:12px; font-size:22px; font-weight:600;">
@@ -260,8 +218,10 @@ function displayResults() {
   document.querySelector(".retake-btn").addEventListener("click", () => {
     questionIndex = 0;
     score = 0;
+    goalCode = "---";
     userAnswers = Array(quizData.length).fill(null);
     quizData = quizData.sort(() => Math.random() - 0.5);
+
     quizResult.style.display = "none";
     quizContainer.style.display = "block";
     createQuestion();
@@ -286,14 +246,6 @@ function displayNextQuestion() {
 
   questionIndex++;
   createQuestion();
-
-  if (questionIndex === quizData.length - 1) {
-    nextBtn.textContent = "End Quiz";
-    nextBtn.classList.add("end-btn");
-  } else {
-    nextBtn.textContent = "Next";
-    nextBtn.classList.remove("end-btn");
-  }
 }
 
 // ------------------------------
