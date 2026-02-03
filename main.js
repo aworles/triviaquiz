@@ -146,10 +146,10 @@ let quizData = [
     options: [
       "Nothing",
       "Waffling out three sentences",
-      "A detailed explanation of every line of code",
+      "An explanation of every line of code, but NOT the purpose",
       "A single sentence describing the purpose using correct keywords"
     ],
-    correct: "A detailed explanation of every line of code",
+    correct: "An explanation of every line of code, but NOT the purpose",
     points: 1,
   },
   {
@@ -186,14 +186,14 @@ let quizData = [
     points: 1,
   },
   {
-    question: "Most efficient way to make a student drop CS",
+    question: "Approximately where did Mr. Devine have his wedding with his wife during summer 2023?",
     options: [
-      "To get to the other side",
-      "To knock on the idiot's door",
-      "To run away from Paper 1",
-      "Because someone's code told it to do so"
+      "Da Nang, Vietnam",
+      "Sopot, Poland",
+      "Hainan, China",
+      "Phuket, Thailand"
     ],
-    correct: "To get to the other side",
+    correct: "Da Nang, Vietnam",
     points: 1,
   },
   {
@@ -205,6 +205,48 @@ let quizData = [
       "5"
     ],
     correct: "15",
+    points: 1,
+  },
+  {
+    question: "What is the correct way to eat cereal?",
+    options: ["Cereal first", "Milk first", "Both at the same time", "I eat it dry like a psychopath"],
+    correct: "Cereal first",
+    points: 1,
+  },
+  {
+    question: "What do students do during a fire drill?",
+    options: ["Walk calmly", "Panic", "Treat it like a holiday", "Ask if it's graded"],
+    correct: "Treat it like a holiday",
+    points: 1,
+  },
+  {
+    question: "What is the scariest phrase a teacher can say?",
+    options: ["Pop quiz", "Group project", "I'll wait", "Open your textbooks"],
+    correct: "I'll wait",
+    points: 1,
+  },
+  {
+    question: "What is the correct way to fix a bug?",
+    options: ["Debugging", "Banging the computer a few times", "Crying", "Turning it off and on"],
+    correct: "Turning it off and on",
+    points: 1,
+  },
+  {
+    question: "Who was the best player in the 2022 WC Final?",
+    options: ["Messi", "Messi", "Messi", "Mbappé"],
+    correct: "Messi",
+    points: 1,
+  },  
+  {
+    question: "2-0",
+    options: ["Argentina", "2", "0", "France"],
+    correct: "Argentina",
+    points: 1,
+  },
+    {
+    question: "How many tabs is in one of the paper bills?",
+    options: ["1000", "500", "1", "100"],
+    correct: "1000",
     points: 1,
   }
 ];
