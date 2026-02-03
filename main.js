@@ -160,6 +160,9 @@ quizData = quizData.sort(() => Math.random() - 0.5);
 function baguetteConfetti() {
   const container = document.getElementById("confetti-container");
 
+  // FIX: clear old confetti so nothing freezes
+  container.innerHTML = "";
+
   for (let i = 0; i < 120; i++) {
     setTimeout(() => {
       const el = document.createElement("div");
