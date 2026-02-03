@@ -29,7 +29,7 @@ let quizData = [
       "..Overflow?",
     ],
     correct: "1111010101111100001010",
-    points: 3,
+    points: 1,
   },
   {
     question: "Guess the answer.",
@@ -49,7 +49,81 @@ let quizData = [
     points: 1,
     troll: true,
   },
+  {
+  question: "What is the exact date of the FIRST ever CS assignment given on MS Teams?",
+  options: [
+    "Friday, November 15th 2024",
+    "Wednesday, November 20th 2024",
+    "Tuesday, October 29th 2024",
+    "Thursday, November 14th 2024",
+  ],
+  correct: "Friday, November 15th 2024",
+  points: 1,
+},
+
+{
+  question: "What is one of the first homeworks given about Python in MS Teams that not many knew how to complete?",
+  options: ["Bingo Project", "Fibonacci Sequence", "Validation Checks", "1D Arrays"],
+  correct: "Fibonacci Sequence",
+  points: 1,
+},
+
+{
+  question: "What was the first 15 marker (Paper 2) exercise that we looked at about?",
+  options: ["Temperatures", "Mountains", "Matches", "Competitors"],
+  correct: "Temperatures",
+  points: 1,
+},
+
+{
+  question: "What is the exact date of the Y10 End of Year Exam?",
+  options: [
+    "Tuesday 27 May at 13:30",
+    "Wednesday 28 May at 12:45",
+    "Friday 30 May at 13:30",
+    "Monday 26 May at 11:30",
+  ],
+  correct: "Tuesday 27 May at 13:30",
+  points: 1,
+},
+{
+  question: "What is the capital of france?",
+  options: [
+    "Paris",
+    "Marseille",
+    "Lyon",
+    "F",
+  ],
+  correct: "F",
+  points: 1,
+},
+{
+  question: "France's penalty kicks is best described as:",
+  options: [
+    "Elite",
+    "World-class",
+    "Legendary",
+    "Predictable",
+  ],
+  correct: "Predictable",
+  points: 1,
+},
+{
+  question: "French language is described as:",
+  options: [
+    "Romantic",
+    "Elegant",
+    "Beautiful",
+    "English with extra letters",
+  ],
+  correct: "English with extra letters",
+  points: 1,
+},
+  
+  
+  
 ];
+
 
 // ------------------------------
 // ELEMENTS
