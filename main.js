@@ -285,34 +285,24 @@ quizData = quizData.sort(() => Math.random() - 0.5);
 // ------------------------------
 
 function baguetteConfetti() {
-  const old = document.getElementById("confetti-container");
-
-  // Hard reset the container
-  const container = old.cloneNode(false);
-  old.replaceWith(container);
-
-  // ⭐ Force reflow so animations restart cleanly
-  void container.offsetHeight;
-
-  const icons = ["🥖", "🥐"];
+  const container = document.getElementById("confetti-container");
 
   for (let i = 0; i < 120; i++) {
     setTimeout(() => {
       const el = document.createElement("div");
       el.className = "baguette";
 
+      const icons = ["🥖", "🥐"];
       el.textContent = icons[Math.floor(Math.random() * icons.length)];
 
       el.style.left = Math.random() * 100 + "vw";
       el.style.fontSize = (1.5 + Math.random() * 2.5) + "rem";
       el.style.animationDuration = (4 + Math.random() * 3) + "s";
-      el.style.animationDelay = (Math.random() * 0.2) + "s"; // ⭐ smooth staggering
+      el.style.animationTimingFunction = "linear";
 
       container.appendChild(el);
-
-      // Remove after animation
       setTimeout(() => el.remove(), 8000);
-    }, i * 25); // ⭐ slightly slower spawn = smoother
+    }, i * 20);
   }
 }
 
