@@ -38,7 +38,7 @@ let quizData = [
     points: 1,
   },
   {
-    question: "What is the *worst* CS unit in the syllabus? (Hint: It's none.. obviously.)",
+    question: "What is the *worst* CS unit in the syllabus? (It's none.. obviously.)",
     options: [
       "Hardware",
       "Software",
@@ -172,7 +172,7 @@ let quizData = [
       "77 68 61 74"
     ],
     correct: "66 6C 69 70 70 79 20 62 69 74 20 61 6E 64 20 74 68 65 20 61 74 74 61 63 6B 20 6F 66 20 74 68 65 20 68 65 78 61 64 65 63 69 6D 61 6C 20 66 72 6F 6D 20 62 61 73 65 20 31 36",
-    points: 1,
+    points: 3,
   },
   {
     question: "Why did the chicken cross the road?",
@@ -194,7 +194,7 @@ let quizData = [
       "Phuket, Thailand"
     ],
     correct: "Da Nang, Vietnam",
-    points: 1,
+    points: 3,
   },
   {
     question: "Approx. how many times did the word 'system' or 'systems' appear in page 243, of the textbook?",
@@ -205,7 +205,7 @@ let quizData = [
       "5"
     ],
     correct: "15",
-    points: 1,
+    points: 5,
   },
   {
     question: "What is the correct way to eat cereal?",
@@ -247,7 +247,7 @@ let quizData = [
     question: "How many tabs is in one of the paper bills?",
     options: ["1000", "500", "1", "100"],
     correct: "1000",
-    points: 1,
+    points: 2,
   }
 ];
 
@@ -287,25 +287,32 @@ quizData = quizData.sort(() => Math.random() - 0.5);
 function baguetteConfetti() {
   const old = document.getElementById("confetti-container");
 
-  // Hard reset the container (fixes stuck confetti)
+  // Hard reset the container
   const container = old.cloneNode(false);
   old.replaceWith(container);
+
+  // ⭐ Force reflow so animations restart cleanly
+  void container.offsetHeight;
+
+  const icons = ["🥖", "🥐"];
 
   for (let i = 0; i < 120; i++) {
     setTimeout(() => {
       const el = document.createElement("div");
       el.className = "baguette";
 
-      const icons = ["🥖", "🥐"];
       el.textContent = icons[Math.floor(Math.random() * icons.length)];
 
       el.style.left = Math.random() * 100 + "vw";
       el.style.fontSize = (1.5 + Math.random() * 2.5) + "rem";
       el.style.animationDuration = (4 + Math.random() * 3) + "s";
+      el.style.animationDelay = (Math.random() * 0.2) + "s"; // ⭐ smooth staggering
 
       container.appendChild(el);
+
+      // Remove after animation
       setTimeout(() => el.remove(), 8000);
-    }, i * 20);
+    }, i * 25); // ⭐ slightly slower spawn = smoother
   }
 }
 
