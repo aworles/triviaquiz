@@ -206,9 +206,7 @@ let quizData = [
     ],
     correct: "15",
     points: 1,
-  },
-  
-  
+  }
 ];
 
 
