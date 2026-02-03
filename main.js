@@ -59,7 +59,7 @@ let quizData = [
   ],
   correct: "Friday, November 15th 2024",
   points: 1,
-},
+  },
 
   {
     question: "What is one of the first homeworks given about Python in MS Teams that not many knew how to complete?",
