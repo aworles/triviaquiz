@@ -243,11 +243,11 @@ quizData = quizData.sort(() => Math.random() - 0.5);
 // ------------------------------
 
 function baguetteConfetti() {
-  const container = document.getElementById("confetti-container");
+  const old = document.getElementById("confetti-container");
 
-  // clear old confetti
-  container.innerHTML = "";
-  container.offsetHeight; // force reflow so animations restart properly
+  // Hard reset the container (fixes stuck confetti)
+  const container = old.cloneNode(false);
+  old.replaceWith(container);
 
   for (let i = 0; i < 120; i++) {
     setTimeout(() => {
@@ -262,7 +262,6 @@ function baguetteConfetti() {
       el.style.animationDuration = (4 + Math.random() * 3) + "s";
 
       container.appendChild(el);
-
       setTimeout(() => el.remove(), 8000);
     }, i * 20);
   }
@@ -310,8 +309,8 @@ function createQuestion() {
   const q = quizData[questionIndex];
 
   questionEl.innerHTML = `
-    <span class="question-number">Question ${questionIndex + 1}</span><br>
-    ${q.question}
+    <span class="question-number">Question ${questionIndex + 1}</span>
+    <span class="question-text">${q.question}</span>
   `;
 
   pointsBadge.textContent = `${q.points} pts`;
