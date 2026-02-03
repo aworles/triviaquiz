@@ -221,28 +221,34 @@ body {
    CONFETTI FIXED
 --------------------------------------------------------- */
 
+/* CONFETTI */
 #confetti-container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   overflow: hidden;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .baguette {
   position: absolute;
-  top: -50px;
-  animation-name: fall;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
+  font-size: 2rem;
+  animation: fall 2.5s linear forwards;
+  user-select: none;
 }
 
 @keyframes fall {
-  0% { transform: translateY(-50px) rotate(0deg); }
-  100% { transform: translateY(110vh) rotate(360deg); }
+  0% {
+    transform: translateY(-50px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 /* ---------------------------------------------------------
