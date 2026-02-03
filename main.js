@@ -123,7 +123,7 @@ let quizData = [
     question: "What was the first flowchart exercise about? ",
     options: [
       "Input 2 numbers, add them and output the result",
-      "Input 3 nmubers, find the highest and output the result",
+      "Input 3 numbers, find the highest and output the result",
       "Input 2 numbers, multiply them and output the result",
       "Input 3 numbers, sum them and output the result",
     ],
@@ -245,8 +245,9 @@ quizData = quizData.sort(() => Math.random() - 0.5);
 function baguetteConfetti() {
   const container = document.getElementById("confetti-container");
 
-  // FIX: clear old confetti so nothing freezes
+  // clear old confetti
   container.innerHTML = "";
+  container.offsetHeight; // force reflow so animations restart properly
 
   for (let i = 0; i < 120; i++) {
     setTimeout(() => {
@@ -261,6 +262,7 @@ function baguetteConfetti() {
       el.style.animationDuration = (4 + Math.random() * 3) + "s";
 
       container.appendChild(el);
+
       setTimeout(() => el.remove(), 8000);
     }, i * 20);
   }
@@ -316,7 +318,10 @@ function createQuestion() {
 
   optionsEl.innerHTML = "";
 
-  q.options.forEach((opt) => {
+  // ⭐ RANDOMIZE ANSWER ORDER
+  const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+  shuffledOptions.forEach((opt) => {
     const btn = document.createElement("button");
     btn.classList.add("option");
     btn.textContent = opt;
@@ -335,7 +340,6 @@ function createQuestion() {
     });
   }
 
-  // last question → change button
   if (questionIndex === quizData.length - 1) {
     nextBtn.textContent = "End Quiz";
     nextBtn.classList.add("end-btn");
