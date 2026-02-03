@@ -119,6 +119,7 @@ body {
   flex-direction: column;
   gap: 12px;
   margin-top: 20px;
+  margin-bottom: 32px;
 }
 
 .option {
@@ -160,6 +161,7 @@ body {
 .nav-buttons {
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
 }
 
 .next-btn,
