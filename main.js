@@ -80,6 +80,31 @@ let totalPossiblePoints = quizData.reduce((sum, q) => sum + q.points, 0);
 quizData = quizData.sort(() => Math.random() - 0.5);
 
 // ------------------------------
+// CONFETTI (TAB CASINO VERSION)
+// ------------------------------
+
+function baguetteConfetti() {
+  const container = document.getElementById("confetti-container");
+
+  for (let i = 0; i < 120; i++) {
+    setTimeout(() => {
+      const el = document.createElement("div");
+      el.className = "baguette";
+
+      const icons = ["🥖", "🥐"];
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = (1.5 + Math.random() * 2.5) + "rem";
+      el.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 8000);
+    }, i * 20);
+  }
+}
+
+// ------------------------------
 // CHECK ANSWER
 // ------------------------------
 
@@ -170,6 +195,7 @@ function displayResults() {
   const goalAchieved = accuracy >= 80;
 
   if (goalAchieved && goalCode === "---") {
+    baguetteConfetti();
     goalCode = "S20"; // your code
   }
 
