@@ -199,7 +199,7 @@ let quizData = [
   {
     question: "Approx. how many times did the word 'system' or 'systems' appear in page 243, of the textbook?",
     options: [
-      "0,
+      "0",
       "15",
       "10",
       "5"
